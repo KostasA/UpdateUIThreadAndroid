@@ -1,6 +1,7 @@
 package com.example.grinkoan.ka_update_ui;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.grinkoan.ka_update_ui.thirdpart.CanUpdateUi;
 
 import java.lang.ref.WeakReference;
 
@@ -30,8 +33,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
         resultHandler = new HandlerExtension(this);
-
-
     }
 
     private void startGenerating()
@@ -71,13 +72,16 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void run()
         {
+            //Looper.prepare();
             Log.d(TAG,"doing work in Random Number Thread");
             while(true)
             {
                 int randNum = (int) (Math.random()*RANDOM_MULTIPLIER);
-                publishProgress(randNum);
+                //publishProgress(randNum);
                 try
                 {
+                    CanUpdateUi uUi = new CanUpdateUi(resultHandler);
+                    uUi.updateUi(randNum);
                     Thread.sleep(5000);
                 }
                 catch (InterruptedException p_e)
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity
                     Log.d(TAG, "Interrupting and stopping the Random Number Thread");
                     return;
                 }
+              //  Looper.loop();
 
             }
 
